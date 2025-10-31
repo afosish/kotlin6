@@ -5,8 +5,16 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.http.content.*
+import io.ktor.server.plugins.statuspages.*
 
 fun Application.configureRouting() {
+
+    install(StatusPages) {
+        exception<IllegalStateException> { call, cause ->
+            call.respondText("App in illegal state as ${cause.message}")
+        }
+    }
+
     routing {
         staticResources("/content", "mycontent")
 
